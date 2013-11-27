@@ -21,7 +21,9 @@ Import GeoNames.org data into a SQLite database
     3725276|Fond Parisien, Ouest, Haiti|Fond Parisien|Ouest|Haiti|18256|18.50583|-71.97667|America/Port-au-Prince
     sqlite> 
 
-## Autocomplete remote data source for [Twitter typeahead.js](http://twitter.github.io/typeahead.js/)
+## Autocomplete remote data source
+
+Returns a JSON array of datums compatible with [Twitter typeahead.js](http://twitter.github.io/typeahead.js/).
 
 For example, http://www.example.com/complete.php?q=san+jose
 
