@@ -2,19 +2,19 @@
 /************************************************************************
  * Geonames autocomplete remote JSON data souce for Twitter typeahead.js
  *
- * Copyright (c) 2013, Michael J. Radwin
+ * Copyright (c) 2014, Michael J. Radwin
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  * - Redistributions of source code must retain the above copyright notice, this
  *   list of conditions and the following disclaimer.
- * 
+ *
  * - Redistributions in binary form must reproduce the above copyright notice, this
  *   list of conditions and the following disclaimer in the documentation and/or
  *   other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -60,19 +60,29 @@ if (!$query) {
 $search_results = array();
 
 while ($res = $query->fetchArray(SQLITE3_ASSOC)) {
+    $longname = $res["asciiname"];
+    if (!empty($res["admin1"])
+        && strncmp($res["admin1"], $res["asciiname"], strlen($res["asciiname"])) != 0) {
+        $longname .= ", " . $res["admin1"];
+        $a1tokens = explode(" ", $res["admin1"]);
+    } else {
+        $a1tokens = array();
+    }
+    $longname .= ", " . $res["country"];
     $tokens = array_merge(explode(" ", $res["asciiname"]),
-			  explode(" ", $res["admin1"]),
-			  explode(" ", $res["country"]));
+              $a1tokens,
+              explode(" ", $res["country"]));
     $search_results[] = array("id" => $res["geonameid"],
-			      "value" => $res["longname"],
-			      "admin1" => $res["admin1"],
-			      "asciiname" => $res["asciiname"],
-			      "country" => $res["country"],
-			      "latitude" => $res["latitude"],
-			      "longitude" => $res["longitude"],
-			      "timezone" => $res["timezone"],
-			      "population" => $res["population"],
-			      "tokens" => $tokens);
+                  "value" => $longname,
+                  "admin1" => $res["admin1"],
+                  "asciiname" => $res["asciiname"],
+                  "country" => $res["country"],
+                  "latitude" => $res["latitude"],
+                  "longitude" => $res["longitude"],
+                  "timezone" => $res["timezone"],
+                  "population" => $res["population"],
+                  "geo" => "geoname",
+                  "tokens" => $tokens);
 }
 
 // clean up
