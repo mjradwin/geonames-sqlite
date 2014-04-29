@@ -1,7 +1,7 @@
 geonames-sqlite
 ===============
 
-Import GeoNames.org data into a SQLite database
+Import GeoNames.org data into a SQLite database for full-text search and autocomplete
 
 ## Example Usage
 
@@ -68,7 +68,7 @@ For example, http://www.example.com/complete.php?q=san+jose
        },
        {
           "id":3621849,
-          "value":"San Jose, San Jose, Costa Rica",
+          "value":"San Jose, Costa Rica",
           "admin1":"San Jose",
           "asciiname":"San Jose",
           "country":"Costa Rica",
@@ -77,8 +77,6 @@ For example, http://www.example.com/complete.php?q=san+jose
           "timezone":"America\/Costa_Rica",
           "population":335007,
           "tokens":[
-             "San",
-             "Jose",
              "San",
              "Jose",
              "Costa",
