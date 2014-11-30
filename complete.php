@@ -34,6 +34,14 @@ if (isset($_SERVER["HTTP_IF_MODIFIED_SINCE"])) {
     exit;
 }
 
+$qraw = isset($_REQUEST["q"]) ? trim($_REQUEST["q"]) : "";
+if (strlen($qraw) == 0) {
+    header("HTTP/1.1 404 Not Found");
+    header("Content-Type: application/json; charset=UTF-8");
+    echo json_encode(array("error" => "Not Found")), "\n";
+    exit;
+}
+
 $file = $_SERVER["DOCUMENT_ROOT"] . "/geonames.sqlite3";
 $db = new SQLite3($file);
 if (!$db) {
@@ -41,19 +49,21 @@ if (!$db) {
     die();
 }
 
+$qe = SQLite3::escapeString($qraw);
+
 $sql = <<<EOD
-SELECT geonameid, longname,
+SELECT geonameid,
 asciiname, admin1, country,
 population, latitude, longitude, timezone
 FROM geoname_fulltext
-WHERE longname MATCH '"$_REQUEST[q]*"'
+WHERE longname MATCH '"$qe*"'
 ORDER BY population DESC
 LIMIT 10
 EOD;
 
 $query = $db->query($sql);
 if (!$query) {
-    error_log("Querying '$_REQUEST[q]' from $file: " . $db->lastErrorMsg());
+    error_log("Querying '$qe' from $file: " . $db->lastErrorMsg());
     die();
 }
 
