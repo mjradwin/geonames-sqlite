@@ -70,29 +70,33 @@ if (!$query) {
 $search_results = array();
 
 while ($res = $query->fetchArray(SQLITE3_ASSOC)) {
-    $longname = $res["asciiname"];
-    if (!empty($res["admin1"])
-        && strncmp($res["admin1"], $res["asciiname"], strlen($res["asciiname"])) != 0) {
-        $longname .= ", " . $res["admin1"];
-        $a1tokens = explode(" ", $res["admin1"]);
-    } else {
-        $a1tokens = array();
-    }
-    $longname .= ", " . $res["country"];
-    $tokens = array_merge(explode(" ", $res["asciiname"]),
-              $a1tokens,
-              explode(" ", $res["country"]));
-    $search_results[] = array("id" => $res["geonameid"],
-                  "value" => $longname,
-                  "admin1" => $res["admin1"],
+      $loc = array("id" => $res["geonameid"],
                   "asciiname" => $res["asciiname"],
-                  "country" => $res["country"],
                   "latitude" => $res["latitude"],
                   "longitude" => $res["longitude"],
                   "timezone" => $res["timezone"],
                   "population" => $res["population"],
-                  "geo" => "geoname",
-                  "tokens" => $tokens);
+                  "geo" => "geoname");
+      $longname = $res["asciiname"];
+      $a1tokens = array();
+      if (!empty($res["admin1"])) {
+          $loc["admin1"] = $res["admin1"];
+          if (strncmp($res["admin1"], $res["asciiname"], strlen($res["asciiname"])) != 0) {
+              $longname .= ", " . $res["admin1"];
+              $a1tokens = explode(" ", $res["admin1"]);
+          }
+      }
+      $ctokens = array();
+      if (!empty($res["country"])) {
+          $loc["country"] = $res["country"];
+          $longname .= ", " . $res["country"];
+          $ctokens = explode(" ", $res["country"]);
+      }
+      $loc["value"] = $longname;
+      $tokens = array_merge(explode(" ", $res["asciiname"]),
+        $a1tokens, $ctokens);
+      $loc["tokens"] = $tokens;
+      $search_results[] = $loc;
 }
 
 // clean up
