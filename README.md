@@ -5,9 +5,9 @@ Import GeoNames.org data into a SQLite database for full-text search and autocom
 
 ## Example Usage
 
-    wget http://download.geonames.org/export/dump/countryInfo.txt
-    wget http://download.geonames.org/export/dump/admin1CodesASCII.txt
-    wget http://download.geonames.org/export/dump/cities15000.zip
+    curl -O http://download.geonames.org/export/dump/countryInfo.txt
+    curl -O http://download.geonames.org/export/dump/admin1CodesASCII.txt
+    curl -O http://download.geonames.org/export/dump/cities15000.zip
     unzip cities15000.zip
     ./geonames_cities_sqlite.pl geonames.sqlite3 \
         countryInfo.txt cities15000.txt admin1CodesASCII.txt
