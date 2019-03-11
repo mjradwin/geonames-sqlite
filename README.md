@@ -84,3 +84,21 @@ For example, http://www.example.com/complete.php?q=san+jose
           ]
        }
     ]
+
+
+## dependencies
+
++ lib DBI
++ perl:sqlite3
+
+### installation on ubuntu/debian:
+
+```bash
+sudo apt-get install libdbi-perl
+
+sudo apt-get install libdbd-sqlite3-perl
+```
+
+
+
+
